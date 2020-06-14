@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+	<record id="rule_accrued_Leave_balance" model="hr.salary.rule" forcecreate="False">
+		<field name="name">Accrued Leave Balance</field>
+		<field name="code">LeaveBal</field>
+		<field name="sequence">10</field>
+		<field name="category_id" ref="hr_payroll.COMP" />
+		<field name="condition_select">python</field>
+		<field name="appears_on_payslip" eval="False" />
+		<field name="condition_python">result = True</field>
+		<field name="amount_select">code</field>
+		<field name="amount_python_compute">
+<![CDATA[
+holiday_status_id = employee.env.ref('hr_holidays.holiday_status_cl')
+result = employee.get_leave_balance(holiday_status_id, payslip.date_to)
+]]>
+		</field>			
+	</record>
+	
+	<record id="rule_accrued_Leave_amount" model="hr.salary.rule" forcecreate="False">
+		<field name="name">Accrued Leave Amount</field>
+		<field name="code">LeaveAmt</field>
+		<field name="sequence">11</field>
+		<field name="category_id" ref="hr_payroll.COMP" />
+		<field name="condition_select">python</field>
+		<field name="appears_on_payslip" eval="False" />
+		<field name="condition_python">result = True</field>
+		<field name="amount_select">code</field>
+		<field name="amount_python_compute">
+<![CDATA[
+result = LeaveBal * contract.wage / 30
+end_of_service = payslip.end_of_service and payslip.end_of_service.id
+if result < 0 and not end_of_service:
+	result = 0
+]]>
+		</field>			
+	</record>	
+	
+	<record id="rule_accrued_Leave_post" model="hr.salary.rule" forcecreate="False">
+		<field name="name">Accrued Leave Amount To Post</field>
+		<field name="code">LeavePost</field>
+		<field name="sequence">12</field>
+		<field name="category_id" ref="hr_payroll.COMP" />
+		<field name="condition_select">python</field>
+		<field name="appears_on_payslip" eval="False" />
+		<field name="condition_python">result = True</field>
+		<field name="amount_select">code</field>
+		<field name="amount_python_compute">
+<![CDATA[
+account_id = employee.env.ref('oi_payroll_accrued_leave.rule_accrued_Leave_post').sudo().account_debit
+previous_amount = employee.env['account.move.line'].sudo().read_group([('account_id','=', account_id.id),('partner_id','=', employee.address_home_id.id)], ['balance'],[])[0]['balance'] or 0
+result = LeaveAmt + previous_amount
+]]>
+		</field>			
+	</record>	
+	
+	<record id="rule_accrued_Leave_payment" model="hr.salary.rule" forcecreate="False">
+		<field name="name">Accrued Leave</field>
+		<field name="code">LeavePay</field>
+		<field name="sequence">13</field>
+		<field name="category_id" ref="hr_payroll.ALW" />
+		<field name="condition_select">python</field>
+		<field name="appears_on_payslip" eval="True" />
+		<field name="condition_python">
+<![CDATA[
+result = payslip.end_of_service and payslip.end_of_service.id
+]]>
+		</field>			
+		<field name="amount_select">code</field>
+		<field name="amount_python_compute">
+<![CDATA[
+result = LeaveAmt
+]]>
+		</field>			
+	</record>	
+	
+	
+	<function model="hr.payroll.structure" name="write" eval="([ref('hr_payroll.structure_base')], {'rule_ids' : [(4, ref('rule_accrued_Leave_balance')),(4, ref('rule_accrued_Leave_amount')),(4, ref('rule_accrued_Leave_post')),(4, ref('rule_accrued_Leave_payment'))]})" />
+
+</odoo>

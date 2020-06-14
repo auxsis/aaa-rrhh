@@ -1,0 +1,60 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="motorized_assignment.list">
+      <field name="name">motorized_assignment list</field>
+      <field name="model">motorized_assignment.motorized_assignment</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="motorized_assignment.action_window">
+      <field name="name">motorized_assignment window</field>
+      <field name="res_model">motorized_assignment.motorized_assignment</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="motorized_assignment.action_server">
+      <field name="name">motorized_assignment server</field>
+      <field name="model_id" ref="model_motorized_assignment_motorized_assignment"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="motorized_assignment" id="motorized_assignment.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="motorized_assignment.menu_1" parent="motorized_assignment.menu_root"/>
+    <menuitem name="Menu 2" id="motorized_assignment.menu_2" parent="motorized_assignment.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="motorized_assignment.menu_1_list" parent="motorized_assignment.menu_1"
+              action="motorized_assignment.action_window"/>
+    <menuitem name="Server to list" id="motorized_assignment" parent="motorized_assignment.menu_2"
+              action="motorized_assignment.action_server"/>
+    -->
+  </data>
+</odoo>

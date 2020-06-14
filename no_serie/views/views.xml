@@ -1,0 +1,29 @@
+<odoo>
+  <data>
+     <!--<record model="ir.ui.view" id="account_invoice_line_treeserie">-->
+            <!--<field name="name">account.invoice.line.treeserie</field>-->
+            <!--<field name="model">account.invoice.line</field>-->
+            <!--<field name="inherit_id" ref="account.view_invoice_line_tree"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<data>-->
+                    <!--<xpath expr="//field[@name='price_unit']" position="after">-->
+                         <!--<field name="lot_ids"/>-->
+                    <!--</xpath>-->
+                <!--</data>-->
+            <!--</field>-->
+        <!--</record>-->
+
+         <!--<record model="ir.ui.view" id="account_invoice_line_forms">-->
+            <!--<field name="name">account.invoice.line.forms</field>-->
+            <!--<field name="model">account.invoice.line</field>-->
+            <!--<field name="inherit_id" ref="account.view_invoice_line_form"/>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<data>-->
+                    <!--<xpath expr="//field[@name='price_unit']" position="after">-->
+                         <!--<field name="lot_ids"/>-->
+                    <!--</xpath>-->
+                <!--</data>-->
+            <!--</field>-->
+        <!--</record>-->
+  </data>
+</odoo>

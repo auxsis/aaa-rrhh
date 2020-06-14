@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_motorized_assignment_motorized_assignment,motorized_assignment.motorized_assignment,model_motorized_assignment_motorized_assignment,,1,0,0,0

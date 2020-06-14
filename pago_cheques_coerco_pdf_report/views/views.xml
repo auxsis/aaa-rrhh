@@ -1,0 +1,184 @@
+<odoo>
+    <data>
+
+        <report id="delivery_note_custom"
+                string="Boletas de Pagos por cheque"
+                model="hr.payslip.run"
+                report_type="qweb-pdf"
+                name="pago_cheques_coerco_pdf_report.report_pdf_pago_cheques"
+        />
+
+
+        <template id="report_pdf_pago_cheques">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="web.external_layout">
+                        <t t-foreach="o.slip_ids" t-as="employees">
+                            <t t-if="employees.employee_id.x_studio_forma_de_pago=='Cheque' ">
+                                <div class="page">
+                                    <h5 style="text-align: center;text-decoration: underline;">Pago de Salario</h5>
+
+                                    <table class="table table-sm table-bordered">
+                                        <tr>
+                                            <td>NOMBRE:</td>
+
+                                            <td><span t-field="employees.employee_id.display_name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Cargo:</td>
+
+                                            <td><span t-field="employees.employee_id.department_id.name"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Salario Básico Mensual:</td>
+
+                                            <td ><span t-field="employees.contract_id.wage"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Antiguedad:</td>
+
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Salario Total:</td>
+
+                                            <td><span t-field="employees.contract_id.wage"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Período Comprendido:</td>
+
+                                            <td>Del <t t-esc="o.date_start" t-options="{'widget': 'date','format': 'dd/MM/yyyy'}"/> al <t t-esc="o.date_end" t-options="{'widget': 'date','format': 'dd/MM/yyyy'}"/></td>
+                                        </tr>
+
+
+                                    </table>
+
+
+
+
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td>CONCEPTO</td>
+                                            <td>DIAS</td>
+                                            <td style="text-align: right;">VALOR</td>
+
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Salario Ordinario</td>
+                                            <t t-set="valor_nomina" t-value=""/>
+                                            <t t-set="valor_nomina_money" t-value=""/>
+                                            <t t-foreach="employees.line_ids" t-as="calc_nomina">
+                                                <t t-if="calc_nomina.code=='P006DILAB'" t-set="valor_nomina" t-value="calc_nomina.total"/>
+                                                <t t-if="calc_nomina.code=='I101SAORD'" t-set="valor_nomina_money" t-value="calc_nomina.total"/>
+                                            </t>
+                                            <td><span t-esc="valor_nomina"/></td>
+                                            <td style="text-align: right;"><span t-esc="valor_nomina_money"/></td>
+
+                                        </tr>
+
+                                    </table>
+
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align: right;">Sub Total</td>
+                                            <t t-set="subtotal" t-value=""/>
+                                            <t t-foreach="employees.line_ids" t-as="sub">
+                                                <t t-if="sub.code=='B299TODEV'" t-set="subtotal" t-value="sub.total"/>
+                                            </t>
+                                            <td style="text-align: right;"><span t-esc="subtotal"/></td>
+
+
+
+                                        </tr>
+
+
+                                    </table>
+
+                                    <table class="table table-sm">
+                                        <tr>
+                                            <td>Menos:</td>
+                                            <td></td>
+
+
+                                        </tr>
+                                        <t t-set="inss" t-value=""/>
+                                        <t t-set="ir" t-value=""/>
+                                        <t t-set="neto_pagar" t-value=""/>
+                                        <t t-foreach="employees.line_ids" t-as="menos">
+                                            <t t-if="menos.code=='D301INSSL'" t-set="inss" t-value="menos.total"/>
+                                            <t t-if="menos.code=='D312IMPRE'" t-set="ir" t-value="menos.total"/>
+                                            <t t-if="menos.code=='N501NETO'" t-set="neto_pagar" t-value="menos.total"/>
+                                        </t>
+                                        <tr>
+
+                                            <td>INSS</td>
+                                            <td style="text-align: right;"><span t-esc="inss"/></td>
+
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>IR</td>
+                                            <td style="text-align: right;"><span t-esc="ir"/></td>
+
+
+                                        </tr>
+                                        <tr>
+
+                                            <td></td>
+                                            <td style="text-align: right;"></td>
+
+
+                                        </tr>
+                                        <tr>
+
+                                            <td>Neto a Pagar</td>
+                                            <td style="text-align: right;"><span t-esc="neto_pagar"/></td>
+
+
+                                        </tr>
+
+                                    </table>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+
+
+
+
+
+                                    <table class="table table-bordered">
+                                        <tr style="font-weight: bold;">
+                                            <td style="text-decoration: overline;">Elaborado Por Resp</td>
+                                            <td style="text-decoration: overline;">Renviado Por</td>
+                                            <td style="text-decoration: overline;">Recibí Conforme</td>
+                                        </tr>
+                                        <tr tyle="font-weight: bold;">
+                                            <td>Resp. Recursos Humanos</td>
+                                            <td>Resp. Contabilidad</td>
+                                            <td><span t-field="employees.employee_id.display_name"/></td>
+
+
+                                        </tr>
+
+
+                                    </table>
+
+
+
+                                    <div style="display:block; page-break-after:always;"></div>
+                                </div>
+
+
+                            </t>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

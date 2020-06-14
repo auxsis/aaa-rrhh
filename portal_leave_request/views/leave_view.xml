@@ -1,0 +1,185 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<odoo>
+    <template id="leaves_page" name="Leave Details">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container">
+                    <br/>
+                    <center>
+                        <h3>My Leaves</h3>
+                    </center>
+                    <br/>
+                    <table class="table-striped table">
+                        <thead style="font-size: 23px;">
+                            <tr>
+                                <a href="/leave_request">REQUEST</a>
+                                <h6>
+                                    <b>
+                                        <th>Leave Type</th>
+                                        <th>Description</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>Number of Days</th>
+                                        <th>State</th>
+                                    </b>
+                                </h6>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="leaves" t-as="leave">
+                                <tr>
+                                    <td>
+                                        <span t-esc="leave.holiday_status_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="leave.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="leave.request_date_from"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="leave.request_date_to"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="leave.number_of_days"/>
+                                    </td>
+                                    <td>
+
+                                        <t t-if="leave.state == 'confirm'" t-esc="'To Approve'"/>
+                                        <t t-if="leave.state == 'validate'" t-esc="'Approved'"/>
+                                        <t t-if="leave.state == 'refuse'" t-esc="'Refused'"/>
+                                        <string>&#160;&#160;&#160;</string>
+                                           <t t-if="leave.state == 'confirm'">
+                                             <button id="refuse_leave" t-att-data-leave= "leave.id" t-att-data-date_from="leave.request_date_from" t-att-data-date_to= "leave.request_date_to" class="myButton btn-secondary">Cancel
+                                           </button>
+                                           </t>
+
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="leaves_create_page" name="Leave Creation">
+        <t t-call="website.layout">
+            <div class="oe_structure">
+                <div class="container">
+                    <h2 style="font-size: 20px; margin-bottom: 26px; margin-top: 10px;">
+                        LEAVE REQUEST
+                    </h2>
+                        <div class="form-group row form-field">
+                            <label class="col-lg-3 col-md-4 col-form-label" name="leave">Leave Type</label>
+                                <select id="leave_type_select" name="leave_type_select_name" style="width: 190px;">
+                                    <t t-foreach="leave_type" t-as="type">
+                                        <option t-att-id="type.id" t-esc="type.name"  t-att-data-id="type.id"
+                                                context="{'employee_id':employee_id, 'default_date_from':date_from}"
+                                                options="{'no_create': True, 'no_open': True}"/>
+                                    </t>
+                                </select>
+                            </div>
+                        <div class="form-group row form-field">
+                            <label class="col-lg-3 col-md-4 col-form-label" for="number_of_days"  >
+                                Duration
+                            </label>
+                            <input type="text" name="duration" id="duration_id" value="0.0" readonly="true" style="border:none; width:50px;"/>
+                            <input type="text" name="duration_days_name" id="duration_days" value="Days" readonly="true" style="border:none; width:50px;"/>
+
+
+                        </div>
+
+                        <div class="form-group row form-field o_website_form_required_custom">
+                            <label class="col-lg-3 col-md-4 col-form-label">From</label>
+                            <div class="col-lg-7 col-md-8 row">
+                                <input type="date" class="fa fa-plus-square" name="date_from" id="date_from" style="width: 190px;"/>
+                                    <select id="request_unit_half_id" name="request_unit_half_name" style="display:none">
+                                            <option value="am" >Morning</option>
+                                            <option value="pm" >Afternoon</option>
+                                    </select>
+                            </div>
+                        </div>
+                        <div class="form-group row form-field">
+                            <label class="col-lg-3 col-md-4 col-form-label" id="label_date_to" style="display:block">To</label>
+                            <div class="col-lg-7 col-md-8 row">
+                                <input type="date" class="fa fa-plus-square " id="date_to" style="display:block; width: 190px;"/>
+
+                            </div>
+                        </div>
+                        <div class="form-group row form-field">
+                            <label class="col-lg-3 col-md-4 col-form-label" for="half_day">Half day</label>
+                            <div class="col-lg-7 col-md-8 row">
+                                <input type="hidden" name="half_day" value="0" />
+                                <input type="checkbox"  name="half_day" id="half_check" value="1"/>
+                            </div>
+                        </div>
+                        <div class="form-group row form-field o_website_form_required_custom">
+                            <label class="col-lg-3 col-md-4 col-form-label" for="description">Description</label>
+                            <div class="col-lg-7 col-md-8 row">
+                                <textarea class="form-control o_website_form_input" id="description_id" style="width: 190px;" placeholder="description..." name="description"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="offset-lg-3 offset-md-4 col-md-8 col-lg-7">
+                                <button role="button" class="btn btn-primary mb32 a-submit a-submit-disable a-submit-loading o_website_form_send"
+                                   type="submit" id="submit_id" name="_create">Request
+                                </button>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    <template id="leaves_created">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure" id="oe_structure_website_crm_contact_us_thanks_1"/>
+                    <div class="container">
+                        <a href="/page/my_leave_details" style="font-size: 23px;" >Leaves</a>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="alert alert-success" role="alert">
+
+                                    Your leave has been created successfully.
+                                    <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </t>
+    </template>
+    <template id="leaves_cancel">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="oe_structure" id="oe_structure_website_crm_contact_us_thanks_1"/>
+                    <div class="container">
+                        <a href="/page/my_leave_details" style="font-size: 23px;">Leaves</a>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="alert alert-danger" role="alert">
+                                    Requested leave has been cancelled.
+                                    <button type="button" class="close" data-dismiss="alert">&amp;times;</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </t>
+    </template>
+    <template id="portal_leave_request.assets_frontend" inherit_id="website.assets_frontend">
+        <xpath expr="." position="inside">
+            <script type="text/javascript" src="portal_leave_request/static/src/js/leave_request.js"/>
+        </xpath>
+    </template>
+
+    <record id="menu_employee_leave_request_from_website_portal" model="website.menu">
+        <field name="name">Leaves</field>
+        <field name="url">/page/my_leave_details</field>
+        <field name="parent_id" ref="website.main_menu"/>
+    </record>
+</odoo>
+
+

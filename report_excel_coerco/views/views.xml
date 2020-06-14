@@ -1,0 +1,70 @@
+<odoo>
+  <data>
+  <record id="inherit_hr_payslip_run_id" model="ir.ui.view">
+    <field name="name">hr.payslip.run.form</field>
+    <field name="model">hr.payslip.run</field>
+    <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//form//header/button[2]" position="after">
+            <button name="action_export_xls_custom" string="Detalles de nomina" type="object" states="draft,close" class="oe_highlight"/>
+        </xpath>
+    </field>
+</record>
+    <!-- explicit list view definition -->
+    <!--
+    <record model="ir.ui.view" id="report_excel_coerco.list">
+      <field name="name">report_excel_coerco list</field>
+      <field name="model">report_excel_coerco.report_excel_coerco</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name"/>
+          <field name="value"/>
+          <field name="value2"/>
+        </tree>
+      </field>
+    </record>
+    -->
+
+    <!-- actions opening views on models -->
+    <!--
+    <record model="ir.actions.act_window" id="report_excel_coerco.action_window">
+      <field name="name">report_excel_coerco window</field>
+      <field name="res_model">report_excel_coerco.report_excel_coerco</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    -->
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="report_excel_coerco.action_server">
+      <field name="name">report_excel_coerco server</field>
+      <field name="model_id" ref="model_report_excel_coerco_report_excel_coerco"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": self._name,
+        }
+      </field>
+    </record>
+    -->
+
+    <!-- Top menu item -->
+    <!--
+    <menuitem name="report_excel_coerco" id="report_excel_coerco.menu_root"/>
+    -->
+    <!-- menu categories -->
+    <!--
+    <menuitem name="Menu 1" id="report_excel_coerco.menu_1" parent="report_excel_coerco.menu_root"/>
+    <menuitem name="Menu 2" id="report_excel_coerco.menu_2" parent="report_excel_coerco.menu_root"/>
+    -->
+    <!-- actions -->
+    <!--
+    <menuitem name="List" id="report_excel_coerco.menu_1_list" parent="report_excel_coerco.menu_1"
+              action="report_excel_coerco.action_window"/>
+    <menuitem name="Server to list" id="report_excel_coerco" parent="report_excel_coerco.menu_2"
+              action="report_excel_coerco.action_server"/>
+    -->
+  </data>
+</odoo>
